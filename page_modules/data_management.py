@@ -729,10 +729,10 @@ def show():
             # Convert to native Python types for JSON serialization
             quality_df_plot = quality_df.copy()
             for col in quality_df_plot.columns:
-                if quality_df_plot[col].dtype == 'object':
-                    quality_df_plot[col] = quality_df_plot[col].astype(str)
-                else:
+                if pd.api.types.is_numeric_dtype(quality_df_plot[col]):
                     quality_df_plot[col] = quality_df_plot[col].astype(float)
+                else:
+                    quality_df_plot[col] = quality_df_plot[col].astype(str)
             
             fig = px.bar(quality_df_plot, x='Column', y='Quality Score',
                         title='Data Quality Score by Column',
