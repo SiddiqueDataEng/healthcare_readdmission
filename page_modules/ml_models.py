@@ -88,7 +88,7 @@ def train_models(X_train, y_train, use_smote=True, _version=3):
 def evaluate_model(model, X_test, y_test):
     y_pred  = model.predict(X_test)
     y_proba = model.predict_proba(X_test)[:, 1]
-    cm      = confusion_matrix(y_test, y_pred)
+    cm      = confusion_matrix(y_test, y_pred, labels=[0, 1])
     fpr, tpr, _ = roc_curve(y_test, y_proba)
     prec, rec, _ = precision_recall_curve(y_test, y_proba)
     report  = classification_report(y_test, y_pred, output_dict=True)
@@ -150,6 +150,10 @@ def show(train_data, test_data):
 
     with st.spinner("Training models..."):
         trained_models = train_models(X_train, y_train, use_smote, _version=3)
+    st.session_state['trained_models'] = trained_models
+    st.session_state['model_feature_names'] = X_train.columns.tolist()
+    st.session_state['prediction_model'] = trained_models.get(
+        'LightGBM', next(iter(trained_models.values())))
     st.success("✅ All 5 models trained successfully!")
 
     # Evaluate all

@@ -31,10 +31,18 @@ def show(train_data, test_data):
         st.warning("⚠️ No trained model found. Train models in the **AI / ML Models** module first.")
         return
 
-    with open('models/best_model.pkl', 'rb') as f:
-        model = pickle.load(f)
-    with open('models/feature_names.pkl', 'rb') as f:
-        feature_names = pickle.load(f)
+    model = st.session_state.get('prediction_model')
+    feature_names = st.session_state.get('model_feature_names')
+    if model is None or feature_names is None:
+        try:
+            with open('models/best_model.pkl', 'rb') as f:
+                model = pickle.load(f)
+            with open('models/feature_names.pkl', 'rb') as f:
+                feature_names = pickle.load(f)
+        except (ModuleNotFoundError, AttributeError, ValueError, pickle.UnpicklingError) as exc:
+            st.error("The saved model is incompatible with this deployment. Train a model in the **AI / ML Models** module first, then return here.")
+            st.caption(f"Model loading failed: {type(exc).__name__}")
+            return
 
     st.success("✅ Model loaded for explanation")
 
