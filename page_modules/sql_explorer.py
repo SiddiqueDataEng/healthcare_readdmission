@@ -9,6 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import sys
 from pathlib import Path
+from streamlit_ace import st_ace
 
 sys.path.append(str(Path(__file__).parent.parent))
 from src.sql_analytics import SQLAnalytics
@@ -84,7 +85,16 @@ def show():
 
         with col_q:
             default_q = "SELECT p.gender, COUNT(*) as patients,\n       AVG(JULIANDAY(e.discharge_date) - JULIANDAY(e.admission_date)) as avg_los,\n       AVG(e.is_heart_failure) * 100 as heart_failure_pct\nFROM patients p\nJOIN encounters e ON p.patient_id = e.patient_id\nGROUP BY p.gender\nORDER BY heart_failure_pct DESC"
-            query = st.text_area("SQL Query", value=default_q, height=200)
+            query = st_ace(
+                value=default_q,
+                language="sql",
+                theme="tomorrow_night",
+                height=200,
+                font_size=14,
+                wrap=True,
+                show_gutter=True,
+                key="sql_query_editor",
+            )
 
             col_a, col_b = st.columns([1, 3])
             with col_a:
