@@ -61,6 +61,12 @@ st.markdown("""
     section[data-testid="stSidebar"] h4 {
         color: #dce8f5 !important;
     }
+    section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+    section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] label {
+        color: #f2f7fc !important;
+        background: transparent !important;
+        font-weight: 600 !important;
+    }
     section[data-testid="stSidebar"] .stRadio label { font-size: 0.92rem; padding: 0.18rem 0; }
     section[data-testid="stSidebar"] hr { border-color: rgba(220, 232, 245, 0.28); }
 
@@ -72,6 +78,13 @@ st.markdown("""
     section[data-testid="stSidebar"] [data-baseweb="popover"] span {
         color: #111111 !important;
         background-color: #ffffff !important;
+    }
+    section[data-testid="stSidebar"] [data-baseweb="select"] [data-baseweb="select-value"],
+    section[data-testid="stSidebar"] [data-baseweb="select"] input,
+    section[data-testid="stSidebar"] [data-baseweb="select"] input::placeholder {
+        color: #172033 !important;
+        -webkit-text-fill-color: #172033 !important;
+        opacity: 1 !important;
     }
     section[data-testid="stSidebar"] [data-baseweb="select"] [data-testid="stMarkdown"] {
         color: #111111 !important;
