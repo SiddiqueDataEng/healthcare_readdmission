@@ -58,6 +58,7 @@ def show():
         st.session_state.cleaned_data = None
     if 'data_loader' not in st.session_state:
         st.session_state.data_loader = DataLoader()
+    loader = st.session_state.data_loader
     
     # Create tabs
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
@@ -142,8 +143,6 @@ def show():
             "Select Data Source",
             ["CSV File", "Excel File", "Parquet File", "Database Query", "Multiple CSV Files"]
         )
-        
-        loader = st.session_state.data_loader
         
         if source_type == "CSV File":
             st.markdown("#### Upload CSV File")

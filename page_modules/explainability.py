@@ -9,8 +9,6 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
-from pathlib import Path
-import pickle
 
 
 def show(train_data, test_data):
@@ -27,22 +25,12 @@ def show(train_data, test_data):
     </div>
     """, unsafe_allow_html=True)
 
-    if not Path('models/best_model.pkl').exists():
-        st.warning("⚠️ No trained model found. Train models in the **AI / ML Models** module first.")
+    from page_modules.ml_models import get_prediction_model
+    try:
+        model, feature_names = get_prediction_model(train_data, test_data)
+    except Exception as exc:
+        st.error(f"Unable to prepare a compatible explainability model: {type(exc).__name__}")
         return
-
-    model = st.session_state.get('prediction_model')
-    feature_names = st.session_state.get('model_feature_names')
-    if model is None or feature_names is None:
-        try:
-            with open('models/best_model.pkl', 'rb') as f:
-                model = pickle.load(f)
-            with open('models/feature_names.pkl', 'rb') as f:
-                feature_names = pickle.load(f)
-        except (ModuleNotFoundError, AttributeError, ValueError, pickle.UnpicklingError) as exc:
-            st.error("The saved model is incompatible with this deployment. Train a model in the **AI / ML Models** module first, then return here.")
-            st.caption(f"Model loading failed: {type(exc).__name__}")
-            return
 
     st.success("✅ Model loaded for explanation")
 

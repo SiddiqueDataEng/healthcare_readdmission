@@ -85,6 +85,35 @@ def train_models(X_train, y_train, use_smote=True, _version=3):
     return trained
 
 
+def get_prediction_model(train_data, test_data):
+    """Return a session, artifact, or freshly trained prediction model."""
+    model = st.session_state.get('prediction_model')
+    feature_names = st.session_state.get('model_feature_names')
+    if model is not None and feature_names is not None:
+        return model, feature_names
+
+    model_path = Path('models/best_model.pkl')
+    features_path = Path('models/feature_names.pkl')
+    if model_path.exists() and features_path.exists():
+        try:
+            with model_path.open('rb') as handle:
+                model = pickle.load(handle)
+            with features_path.open('rb') as handle:
+                feature_names = pickle.load(handle)
+            return model, feature_names
+        except (ModuleNotFoundError, AttributeError, ValueError, pickle.UnpicklingError):
+            pass
+
+    X_train, _, y_train, _, _ = prepare_data(train_data, test_data)
+    trained_models = train_models(X_train, y_train, True, _version=4)
+    model = trained_models.get('LightGBM', next(iter(trained_models.values())))
+    feature_names = X_train.columns.tolist()
+    st.session_state['trained_models'] = trained_models
+    st.session_state['model_feature_names'] = feature_names
+    st.session_state['prediction_model'] = model
+    return model, feature_names
+
+
 def evaluate_model(model, X_test, y_test):
     y_pred  = model.predict(X_test)
     y_proba = model.predict_proba(X_test)[:, 1]

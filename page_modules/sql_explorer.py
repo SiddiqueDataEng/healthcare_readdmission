@@ -83,7 +83,7 @@ def show():
                     st.error(str(e))
 
         with col_q:
-            default_q = "SELECT p.gender, COUNT(*) as patients,\n       AVG(e.length_of_stay) as avg_los,\n       AVG(e.readmitted_30d) * 100 as readmit_pct\nFROM patients p\nJOIN encounters e ON p.patient_id = e.patient_id\nGROUP BY p.gender\nORDER BY readmit_pct DESC"
+            default_q = "SELECT p.gender, COUNT(*) as patients,\n       AVG(JULIANDAY(e.discharge_date) - JULIANDAY(e.admission_date)) as avg_los,\n       AVG(e.is_heart_failure) * 100 as heart_failure_pct\nFROM patients p\nJOIN encounters e ON p.patient_id = e.patient_id\nGROUP BY p.gender\nORDER BY heart_failure_pct DESC"
             query = st.text_area("SQL Query", value=default_q, height=200)
 
             col_a, col_b = st.columns([1, 3])
