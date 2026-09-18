@@ -28,6 +28,9 @@ st.markdown("""
         --ink-muted: #4b5870;
         --navy: #0a2342;
         --blue: #1a6eb5;
+        --green: #1e9b51;
+        --green-soft: #e7f9ee;
+        --green-deep: #114b2d;
         --surface: #ffffff;
         --surface-soft: #f5f8fc;
         --line: #d7e0ea;
@@ -102,10 +105,45 @@ st.markdown("""
         color: #111111 !important;
         background-color: #d5f5e3 !important;
     }
-    .stTextInput input, .stNumberInput input, .stTextArea textarea {
-        background-color: #ffffff !important;
-        border: 1px solid #aebdcd !important;
-        border-radius: 6px;
+    /* Page inputs only: green field with black readable text */
+    div[data-testid="stAppViewContainer"] input,
+    div[data-testid="stAppViewContainer"] textarea,
+    div[data-testid="stAppViewContainer"] [data-baseweb="base-input"],
+    div[data-testid="stNumberInput"] input,
+    div[data-testid="stTextInput"] input,
+    div[data-testid="stTextArea"] textarea {
+        background: #dff7e7 !important;
+        color: #111111 !important;
+        -webkit-text-fill-color: #111111 !important;
+        border: 2px solid #1e9b51 !important;
+        border-radius: 8px !important;
+        box-shadow: none !important;
+        font-weight: 600 !important;
+    }
+
+    div[data-testid="stAppViewContainer"] input::placeholder,
+    div[data-testid="stAppViewContainer"] textarea::placeholder {
+        color: rgba(17, 17, 17, 0.7) !important;
+        -webkit-text-fill-color: rgba(17, 17, 17, 0.7) !important;
+    }
+
+    div[data-testid="stNumberInput"] button,
+    div[data-testid="stTextInput"] button,
+    div[data-testid="stTextArea"] button {
+        background: #1e9b51 !important;
+        border: 1px solid #1e9b51 !important;
+        color: #ffffff !important;
+        border-radius: 0 6px 6px 0 !important;
+        min-width: 2.1rem !important;
+        min-height: 2.1rem !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+    }
+
+    div[data-testid="stWidgetLabel"] {
+        color: #0a2342 !important;
+        font-weight: 600 !important;
+        margin-bottom: 0.4rem !important;
     }
     [data-baseweb="select"] > div {
         border-color: #aebdcd !important;
@@ -220,10 +258,10 @@ st.markdown("""
     .story-banner strong { color: #0a2342 !important; }
 
     /* ── Alert boxes ── */
-    .alert-critical { background:#fff0f0; border:1px solid #e74c3c; border-radius:8px; padding:0.8rem 1rem; margin:0.4rem 0; color:#111 !important; }
-    .alert-warning  { background:#fffbea; border:1px solid #f39c12; border-radius:8px; padding:0.8rem 1rem; margin:0.4rem 0; color:#111 !important; }
-    .alert-info     { background:#f0f8ff; border:1px solid #1a6eb5; border-radius:8px; padding:0.8rem 1rem; margin:0.4rem 0; color:#111 !important; }
-    .alert-success  { background:#f0fff4; border:1px solid #27ae60; border-radius:8px; padding:0.8rem 1rem; margin:0.4rem 0; color:#111 !important; }
+    .alert-critical { background:#ebf9f0; border:2px solid #1e9b51; border-radius:8px; padding:0.8rem 1rem; margin:0.4rem 0; color:#0d3d25 !important; box-shadow: 0 0 0 1px rgba(30,155,81,0.08); }
+    .alert-warning  { background:#ebf9f0; border:2px solid #1e9b51; border-radius:8px; padding:0.8rem 1rem; margin:0.4rem 0; color:#0d3d25 !important; box-shadow: 0 0 0 1px rgba(30,155,81,0.08); }
+    .alert-info     { background:#ebf9f0; border:2px solid #1e9b51; border-radius:8px; padding:0.8rem 1rem; margin:0.4rem 0; color:#0d3d25 !important; box-shadow: 0 0 0 1px rgba(30,155,81,0.08); }
+    .alert-success  { background:#ebf9f0; border:2px solid #1e9b51; border-radius:8px; padding:0.8rem 1rem; margin:0.4rem 0; color:#0d3d25 !important; box-shadow: 0 0 0 1px rgba(30,155,81,0.08); }
 
     /* ── Section title ── */
     .section-title {

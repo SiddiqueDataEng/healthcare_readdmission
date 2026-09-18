@@ -6,6 +6,98 @@ A comprehensive healthcare analytics platform featuring synthetic EHR data gener
 
 ---
 
+## Project Story: From EHR Data to Readmission Decisions
+
+### 1. The problem
+
+Hospital readmissions within 30 days are costly for patients and health systems, and they are also an important quality measure in programs such as the Hospital Readmissions Reduction Program. The practical question for this project is:
+
+> Given information available during an index heart-failure admission, can we estimate whether the patient will be readmitted within 30 days of discharge and present the result in a way that a care team can understand and act on?
+
+The solution must do more than produce a binary prediction. It must assemble a reproducible cohort, avoid using information that would only be known after discharge, handle clinical data quality issues, compare multiple modeling approaches, expose uncertainty and performance, and provide explanations for individual patients.
+
+### 2. Data sources and data itself
+
+The project uses fully synthetic, HIPAA-safe EHR-style data. It is designed to exercise the same integration and modeling workflow as a real clinical data project without exposing real patient information.
+
+The raw source tables are stored in `data/raw/` and are connected through `patient_id` and `encounter_id`:
+
+| Source | Repository snapshot | Important fields | Purpose |
+|---|---:|---|---|
+| `patients.csv` | 5,000 patients | demographics, insurance, ZIP code, death date | Patient context and competing-risk exclusion |
+| `encounters.csv` | 9,970 encounters | admission/discharge dates, diagnosis, disposition, encounter type | Index admissions, readmissions, length of stay, utilization |
+| `diagnoses.csv` | 49,894 diagnoses | diagnosis code, type, date | Comorbidity indicators and diagnosis burden |
+| `labs.csv` | 99,120 lab results | BNP, sodium, creatinine, potassium, hemoglobin | Clinical severity and physiologic measurements |
+| `medications.csv` | 24,968 medication records | medication, class, prescription date, refills | Heart-failure treatment and medication-utilization features |
+
+The generator creates the source data with fixed random seeds for repeatability. The repository also contains processed CSV snapshots in `data/processed/`; the current full-dataset snapshot contains 248 modeling rows after the SQL cohort rules and exclusions are applied. Row counts can change when the synthetic data are regenerated or when the date window is changed.
+
+### 3. Cohort construction and target definition
+
+`sql/sql01_extract_index_admissions.sql` is the central cohort definition. It:
+
+1. Selects inpatient heart-failure admissions using ICD-10 codes `I501`, `I502`, `I503`, and `I509`.
+2. Keeps the most recent qualifying admission for each patient in the configured time window.
+3. Searches for the next inpatient encounter after discharge.
+4. Sets `readmitted_30d = 1` when the next admission occurs within 30 days; otherwise it sets the target to `0`.
+5. Excludes patients who died within 30 days because death is a competing outcome for readmission.
+6. Joins demographics, diagnoses, labs, medications, and prior utilization into one analytic dataset.
+
+The prediction target is therefore a binary outcome: `readmitted_30d`. Dates, identifiers, the future readmission date, days to readmission, and post-outcome fields are excluded from model features to reduce target leakage.
+
+### 4. Data preparation and feature engineering
+
+The data pipeline in `src/data_pipeline.py` and the model preparation code in `page_modules/ml_models.py` apply these techniques:
+
+- Median imputation for missing laboratory values and consistent missing-value filling during model preparation.
+- Categorical conversion and one-hot encoding with train/test column alignment.
+- Age bands (`<65`, `65-74`, `75-84`, `85+`) and BNP severity categories.
+- A comorbidity score formed from hypertension, diabetes, CAD, COPD, CKD, atrial fibrillation, obesity, and anemia indicators.
+- Last available BNP, sodium, creatinine, and hemoglobin values before discharge.
+- Heart-failure medication count, total medication count, refill behavior, prior admissions, prior ED visits, length of stay, and weekend discharge.
+- Stratified 80/20 train/test splitting with a fixed random state so class proportions remain comparable.
+- Feature-name sanitization so generated model columns are accepted consistently by downstream libraries.
+
+The workflow also produces exploratory reports: target balance, numerical distributions, categorical readmission rates, a correlation matrix, and univariate t-tests in `reports/eda/`.
+
+### 5. Techniques applied
+
+The dashboard compares five supervised classification approaches:
+
+| Technique | Role |
+|---|---|
+| Logistic Regression | Interpretable linear baseline |
+| Random Forest | Nonlinear ensemble with balanced class weights |
+| Gradient Boosting | Sequential tree-based model |
+| XGBoost | Regularized gradient-boosted trees |
+| LightGBM | Efficient gradient-boosted tree model used as the prediction fallback |
+
+Because readmission is the minority class, the workflow can apply SMOTE to the training data only. Models are evaluated with ROC-AUC, average precision, precision, recall, F1, confusion matrices, Brier score, and calibration curves. This is important because a clinically useful risk score must rank patients well and produce probabilities that are not misleading.
+
+The explainability module uses SHAP for global feature importance, patient-level contribution plots, and feature interactions. The analytics modules add cohort comparisons, statistical tests, risk tiers, and interactive Plotly visualizations.
+
+### 6. The final solution
+
+The final deliverable is an end-to-end Streamlit application in `app.py` with a single workflow:
+
+1. Generate or load the synthetic source data.
+2. Extract and label the heart-failure readmission cohort with SQL.
+3. Clean, enrich, and split the data into train/test files.
+4. Explore outcome patterns and data quality in the dashboard.
+5. Train and compare five models, optionally balancing the training class with SMOTE.
+6. Select or load a compatible model for real-time scoring.
+7. Enter one patient or upload a batch to receive a probability, risk tier, and clinical follow-up guidance.
+8. Open SHAP explanations to see why the model assigned that risk.
+9. Export scored results for downstream review.
+
+This turns disconnected EHR-style tables into a repeatable clinical analytics workflow: cohort definition, feature engineering, predictive modeling, evaluation, explanation, and operational review in one place.
+
+### 7. Scope and responsible use
+
+The data are synthetic, so this project demonstrates engineering and analytical methods rather than validated clinical performance. It must not be used to make real patient-care decisions without external validation, prospective testing, calibration review, bias and subgroup analysis, privacy controls, clinical governance, and approval for the intended deployment environment. Model output is decision support, not a diagnosis or a replacement for clinician judgment.
+
+---
+
 ## 🎯 Quick Start (3 Steps)
 
 ### Option 1: One-Click Launch (Recommended)
