@@ -1,0 +1,40 @@
+Variable_Name,Description,Data_Type,Missing_Values,Missing_Percentage,Unique_Values,Sample_Values,Min,Max,Mean,Median
+index_encounter_id,No description available,object,0,0.0%,248,"['E00000132', 'E00006162', 'E00000378']",,,,
+patient_id,No description available,object,0,0.0%,248,"['P000076', 'P003108', 'P000207']",,,,
+index_admission,No description available,object,0,0.0%,248,"['2026-01-14 17:41:49.716582', '2026-01-15 17:41:50.200856', '2026-01-11 17:41:49.741347']",,,,
+index_discharge,No description available,object,0,0.0%,248,"['2026-01-27 17:41:49.716582', '2026-01-22 17:41:50.200856', '2026-01-20 17:41:49.741347']",,,,
+readmission_date,No description available,object,239,96.4%,9,"['2025-12-29 17:41:50.343667', '2026-01-14 17:41:49.869930', '2025-12-22 17:41:49.761993']",,,,
+readmitted_30d,Binary indicator: 1 if patient readmitted within 30 days of discharge,int64,0,0.0%,2,"[0, 1]",0.0,1.0,0.008064516129032258,0.0
+days_to_readmit,No description available,float64,239,96.4%,9,"[15.0, 82.0, 59.0]",15.0,118.0,59.55555555555556,59.0
+gender,Patient gender,category,0,0.0%,2,"['M', 'F']",,,,
+age,Patient age in years,int64,0,0.0%,49,"[73, 77, 78]",39.0,94.0,72.15725806451613,73.0
+race,No description available,category,0,0.0%,5,"['Hispanic', 'Asian', 'Other']",,,,
+insurance_type,No description available,category,0,0.0%,4,"['Private', 'Self-pay', 'Medicare']",,,,
+zip_code,No description available,object,0,0.0%,246,"['30676', '41816', '46458']",,,,
+discharge_disposition,No description available,category,0,0.0%,4,"['SNF', 'AMA', 'Hospice']",,,,
+died_within_30d,No description available,int64,0,0.0%,1,[0],0.0,0.0,0.0,0.0
+has_hypertension,Binary: 1 if hypertension diagnosis present,int64,0,0.0%,2,"[0, 1]",0.0,1.0,0.5967741935483871,1.0
+has_diabetes,Binary: 1 if diabetes diagnosis present,int64,0,0.0%,2,"[1, 0]",0.0,1.0,0.6935483870967742,1.0
+has_cad,No description available,int64,0,0.0%,2,"[1, 0]",0.0,1.0,0.6895161290322581,1.0
+has_copd,No description available,int64,0,0.0%,2,"[1, 0]",0.0,1.0,0.657258064516129,1.0
+has_ckd,No description available,int64,0,0.0%,2,"[1, 0]",0.0,1.0,0.5483870967741935,1.0
+has_afib,No description available,int64,0,0.0%,2,"[1, 0]",0.0,1.0,0.6330645161290323,1.0
+has_obesity,No description available,int64,0,0.0%,2,"[0, 1]",0.0,1.0,0.5483870967741935,1.0
+has_anemia,No description available,int64,0,0.0%,2,"[0, 1]",0.0,1.0,0.6209677419354839,1.0
+total_diagnoses,No description available,int64,0,0.0%,10,"[6, 3, 9]",1.0,10.0,6.258064516129032,7.0
+last_bnp,Most recent B-type Natriuretic Peptide lab value,float64,0,0.0%,248,"[2389.87, 277.35, 3901.3]",155.64,17255.38,3569.6364919354837,2773.1549999999997
+last_sodium,No description available,float64,0,0.0%,227,"[144.8, 137.91, 139.79]",130.51,147.75,139.76814516129033,139.78
+last_creatinine,Most recent creatinine lab value,float64,0,0.0%,154,"[1.94, 0.3, 0.87]",0.3,3.52,1.6233870967741937,1.6349999999999998
+last_hemoglobin,No description available,float64,0,0.0%,200,"[13.6, 15.28, 14.22]",8.03,18.85,13.373064516129034,13.535
+hf_med_count,Count of heart failure medications prescribed,float64,7,2.8%,4,"[3.0, 0.0, 2.0]",0.0,3.0,1.3983402489626555,1.0
+max_refill_count,No description available,float64,7,2.8%,4,"[3.0, 0.0, 2.0]",0.0,3.0,2.145228215767635,2.0
+total_meds,No description available,float64,7,2.8%,8,"[4.0, 1.0, 3.0]",1.0,8.0,2.5726141078838176,2.0
+prior_admissions_6m,No description available,int64,0,0.0%,3,"[1, 0, 2]",0.0,2.0,0.22983870967741934,0.0
+prior_ed_visits_30d,No description available,int64,0,0.0%,1,[0],0.0,0.0,0.0,0.0
+length_of_stay,Days between admission and discharge,int64,0,0.0%,18,"[13, 7, 9]",1.0,22.0,4.334677419354839,3.0
+weekend_discharge,Binary: 1 if discharged on weekend,int64,0,0.0%,2,"[0, 1]",0.0,1.0,0.29435483870967744,0.0
+insurance_category,No description available,category,0,0.0%,2,"['Private', 'Public']",,,,
+discharge_location,Category: Home or Facility discharge,category,0,0.0%,2,"['Facility', 'Home']",,,,
+age_group,No description available,category,0,0.0%,4,"['65-74', '75-84', '<65']",,,,
+bnp_category,No description available,category,0,0.0%,3,"['Severe', 'Mild', 'Moderate']",,,,
+comorbidity_score,Count of comorbid conditions,int64,0,0.0%,9,"[5, 4, 2]",0.0,8.0,4.987903225806452,5.0
