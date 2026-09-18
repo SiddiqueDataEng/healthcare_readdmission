@@ -91,7 +91,9 @@ def evaluate_model(model, X_test, y_test):
     cm      = confusion_matrix(y_test, y_pred, labels=[0, 1])
     fpr, tpr, _ = roc_curve(y_test, y_proba)
     prec, rec, _ = precision_recall_curve(y_test, y_proba)
-    report  = classification_report(y_test, y_pred, output_dict=True)
+    report  = classification_report(
+        y_test, y_pred, labels=[0, 1], output_dict=True, zero_division=0
+    )
     brier   = brier_score_loss(y_test, y_proba)
     tn, fp, fn, tp = cm.ravel()
     return {
