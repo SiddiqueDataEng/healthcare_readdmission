@@ -22,7 +22,7 @@ class SQLAnalytics:
         
     def connect(self):
         """Connect to database"""
-        self.conn = sqlite3.connect(self.db_path)
+        self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
         print(f"✅ Connected to {self.db_path}")
         
     def execute_query(self, query: str, params: tuple = None) -> pd.DataFrame:
@@ -35,7 +35,16 @@ class SQLAnalytics:
                 result = pd.read_sql_query(query, self.conn, params=params)
             else:
                 result = pd.read_sql_query(query, self.conn)
+        except sqlite3.ProgrammingError as exc:
+            if "same thread" not in str(exc):
+                raise
+            self.connect()
+            if params:
+                result = pd.read_sql_query(query, self.conn, params=params)
+            else:
+                result = pd.read_sql_query(query, self.conn)
             
+        try:
             # Log query
             self.query_history.append({
                 'timestamp': datetime.now().isoformat(),
