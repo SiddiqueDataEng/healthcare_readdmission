@@ -345,7 +345,7 @@ def show(train_data, test_data):
                     disp['patient_id'] = disp['patient_id'].astype(str).str[:8] + "****"
 
                 st.dataframe(
-                    disp.style.applymap(
+                    disp.style.map(
                         lambda v: 'background-color:#fadbd8; font-weight:bold' if v == '🔴 Very High'
                                   else ('background-color:#fdebd0' if v == '🟠 High' else ''),
                         subset=['risk_tier'] if 'risk_tier' in disp.columns else []

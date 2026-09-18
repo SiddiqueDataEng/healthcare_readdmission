@@ -86,7 +86,7 @@ def show(full_data, train_data, test_data):
                     'Difference': '{:+.3f}', 'T-Stat': '{:.3f}',
                     'P-Value': '{:.4f}', "Cohen's D": '{:.3f}'
                 }).background_gradient(subset=['P-Value'], cmap='RdYlGn')
-                  .applymap(lambda x: 'background-color:#d5f5e3' if '✅' in str(x) else '', subset=['Significant']),
+                  .map(lambda x: 'background-color:#d5f5e3' if '✅' in str(x) else '', subset=['Significant']),
                 use_container_width=True, hide_index=True
             )
 

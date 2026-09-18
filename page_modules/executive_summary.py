@@ -292,7 +292,7 @@ def show(full_data, train_data, test_data):
         high_risk_disp['patient_id'] = high_risk_disp['patient_id'].astype(str).str[:8] + "****"
 
     st.dataframe(
-        high_risk_disp.style.applymap(
+        high_risk_disp.style.map(
             lambda v: 'background-color: #fadbd8; font-weight:bold' if v == '🔴 Very High'
                       else ('background-color: #fdebd0' if v == '🟠 High' else ''),
             subset=['risk_tier'] if 'risk_tier' in high_risk_disp.columns else []
