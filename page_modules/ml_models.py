@@ -61,8 +61,13 @@ def prepare_data(train_data, test_data):
 @st.cache_resource
 def train_models(X_train, y_train, use_smote=True, _version=3):
     if use_smote:
-        sm = SMOTE(random_state=42)
-        X_r, y_r = sm.fit_resample(X_train, y_train)
+        class_counts = pd.Series(y_train).value_counts()
+        minority_count = int(class_counts.min()) if len(class_counts) > 1 else 0
+        if minority_count > 1:
+            sm = SMOTE(random_state=42, k_neighbors=min(5, minority_count - 1))
+            X_r, y_r = sm.fit_resample(X_train, y_train)
+        else:
+            X_r, y_r = X_train, y_train
     else:
         X_r, y_r = X_train, y_train
 
