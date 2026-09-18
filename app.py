@@ -22,24 +22,47 @@ st.set_page_config(
 # ─── CSS ──────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    /* ── Global & fonts ── */
+    /* ── Global readability ── */
+    :root {
+        --ink: #172033;
+        --ink-muted: #4b5870;
+        --navy: #0a2342;
+        --blue: #1a6eb5;
+        --surface: #ffffff;
+        --surface-soft: #f5f8fc;
+        --line: #d7e0ea;
+    }
+
+    html, body, [data-testid="stAppViewContainer"] {
+        background: #f7f9fc !important;
+    }
     html, body, [class*="css"], p, span, div, label, li, td, th {
-        color: #111111 !important;
         font-family: 'Segoe UI', Arial, sans-serif;
     }
+    .main .block-container { padding-top: 1.75rem; padding-bottom: 2rem; }
+    .stMarkdown, .stCaption, .stText, [data-testid="stText"] { color: var(--ink); }
+    p, li, label, [data-testid="stWidgetLabel"] { color: var(--ink) !important; line-height: 1.55; }
+    h1, h2, h3, h4, h5, h6 { color: var(--navy) !important; letter-spacing: 0; }
+    small, .stCaption { color: var(--ink-muted) !important; }
 
     /* ── Sidebar background ── */
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, #0a2342 0%, #1a3a5c 100%) !important;
     }
+    section[data-testid="stSidebar"] .block-container { padding-top: 1.5rem; }
     /* Sidebar text — keep white on dark bg */
     section[data-testid="stSidebar"] p,
     section[data-testid="stSidebar"] span,
     section[data-testid="stSidebar"] div,
-    section[data-testid="stSidebar"] label {
+    section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] h1,
+    section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3,
+    section[data-testid="stSidebar"] h4 {
         color: #dce8f5 !important;
     }
-    section[data-testid="stSidebar"] .stRadio label { font-size: 0.9rem; }
+    section[data-testid="stSidebar"] .stRadio label { font-size: 0.92rem; padding: 0.18rem 0; }
+    section[data-testid="stSidebar"] hr { border-color: rgba(220, 232, 245, 0.28); }
 
     /* ── Sidebar selectbox: BLACK text on WHITE background ── */
     section[data-testid="stSidebar"] [data-baseweb="select"] div,
@@ -66,19 +89,38 @@ st.markdown("""
         color: #111111 !important;
         background-color: #ffffff !important;
     }
+    .stTextInput input, .stNumberInput input, .stTextArea textarea {
+        border: 1px solid #aebdcd !important;
+        border-radius: 6px;
+    }
+    [data-baseweb="select"] > div {
+        border-color: #aebdcd !important;
+        min-height: 2.6rem;
+    }
+    button[kind="secondary"], button[kind="primary"] {
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+    }
 
     /* ── Metric values ── */
-    [data-testid="stMetricValue"]  { color: #0a2342 !important; font-weight: 700; }
-    [data-testid="stMetricLabel"]  { color: #444444 !important; }
+    [data-testid="stMetric"] { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 0.8rem 1rem; }
+    [data-testid="stMetricValue"]  { color: #0a2342 !important; font-weight: 700; font-size: 1.75rem !important; }
+    [data-testid="stMetricLabel"]  { color: #38465d !important; font-weight: 600; }
     [data-testid="stMetricDelta"]  { font-size: 0.82rem !important; }
 
     /* ── Tables & dataframes ── */
-    .dataframe td, .dataframe th { color: #111111 !important; }
+    .dataframe td, .dataframe th { color: #172033 !important; }
+    [data-testid="stDataFrame"] { border: 1px solid var(--line); border-radius: 6px; }
 
     /* ── Tabs ── */
     .stTabs [data-baseweb="tab-list"] { gap: 0.4rem; }
-    .stTabs [data-baseweb="tab"]      { border-radius: 6px 6px 0 0; font-size: 0.87rem; color: #222 !important; }
-    .stTabs [aria-selected="true"]    { background: #e8f0fe !important; color: #0a2342 !important; font-weight: 600; }
+    .stTabs [data-baseweb="tab"]      { border-radius: 6px 6px 0 0; font-size: 0.9rem; color: #38465d !important; padding: 0.55rem 0.8rem; }
+    .stTabs [aria-selected="true"]    { background: #e8f0fe !important; color: #0a2342 !important; font-weight: 700; }
+    .stTabs [data-baseweb="tab-highlight"] { background-color: #1a6eb5 !important; height: 3px; }
+
+    /* ── Expanders and bordered content ── */
+    [data-testid="stExpander"] { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+    [data-testid="stExpander"] summary p { color: var(--navy) !important; font-weight: 600; }
 
     /* ── Main header ── */
     .main-header {
