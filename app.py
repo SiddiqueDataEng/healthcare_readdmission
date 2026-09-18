@@ -110,6 +110,20 @@ st.markdown("""
         border-color: #aebdcd !important;
         min-height: 2.6rem;
     }
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-testid="stWidgetLabel"],
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-testid="stWidgetLabel"] *,
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] label {
+        color: #f2f7fc !important;
+        background: transparent !important;
+        -webkit-text-fill-color: #f2f7fc !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] *,
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] input {
+        color: #172033 !important;
+        background-color: #ffffff !important;
+        -webkit-text-fill-color: #172033 !important;
+        opacity: 1 !important;
+    }
     button[kind="secondary"], button[kind="primary"] {
         font-weight: 600 !important;
         border-radius: 6px !important;
