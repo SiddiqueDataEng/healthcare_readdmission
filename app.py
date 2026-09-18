@@ -70,24 +70,24 @@ st.markdown("""
     section[data-testid="stSidebar"] .stRadio label { font-size: 0.92rem; padding: 0.18rem 0; }
     section[data-testid="stSidebar"] hr { border-color: rgba(220, 232, 245, 0.28); }
 
-    /* ── Sidebar selectbox: BLACK text on WHITE background ── */
+    /* ── Sidebar selectbox: dark green text on pale green background ── */
     section[data-testid="stSidebar"] [data-baseweb="select"] div,
     section[data-testid="stSidebar"] [data-baseweb="select"] span,
     section[data-testid="stSidebar"] [data-baseweb="select"] input,
     section[data-testid="stSidebar"] [data-baseweb="popover"] div,
     section[data-testid="stSidebar"] [data-baseweb="popover"] span {
-        color: #111111 !important;
-        background-color: #ffffff !important;
+        color: #14532d !important;
+        background-color: #d5f5e3 !important;
     }
     section[data-testid="stSidebar"] [data-baseweb="select"] [data-baseweb="select-value"],
     section[data-testid="stSidebar"] [data-baseweb="select"] input,
     section[data-testid="stSidebar"] [data-baseweb="select"] input::placeholder {
-        color: #172033 !important;
-        -webkit-text-fill-color: #172033 !important;
+        color: #14532d !important;
+        -webkit-text-fill-color: #14532d !important;
         opacity: 1 !important;
     }
     section[data-testid="stSidebar"] [data-baseweb="select"] [data-testid="stMarkdown"] {
-        color: #111111 !important;
+        color: #14532d !important;
     }
 
     /* ── Main area selectbox / inputs ── */
@@ -98,17 +98,30 @@ st.markdown("""
     [data-baseweb="popover"] div,
     [data-baseweb="popover"] span,
     .stSelectbox div, .stSelectbox span,
-    .stTextInput input, .stNumberInput input, .stTextArea textarea {
+    .stSelectbox input {
         color: #111111 !important;
-        background-color: #ffffff !important;
+        background-color: #d5f5e3 !important;
     }
     .stTextInput input, .stNumberInput input, .stTextArea textarea {
+        background-color: #ffffff !important;
         border: 1px solid #aebdcd !important;
         border-radius: 6px;
     }
     [data-baseweb="select"] > div {
         border-color: #aebdcd !important;
         min-height: 2.6rem;
+    }
+
+    /* Keep sidebar filter boxes green after the generic input rules above. */
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"],
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] > div,
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] > div > div,
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] * {
+        background: #27ae60 !important;
+        background-color: #27ae60 !important;
+        border-color: #27ae60 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
     section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-testid="stWidgetLabel"],
     section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-testid="stWidgetLabel"] *,
@@ -119,10 +132,49 @@ st.markdown("""
     }
     section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] *,
     section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] input {
-        color: #172033 !important;
-        background-color: #ffffff !important;
-        -webkit-text-fill-color: #172033 !important;
+        color: #14532d !important;
+        background-color: #d5f5e3 !important;
+        -webkit-text-fill-color: #14532d !important;
         opacity: 1 !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] {
+        background-color: #d5f5e3 !important;
+        border: 1px solid #27ae60 !important;
+        border-radius: 6px !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] svg {
+        fill: #14532d !important;
+        color: #14532d !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"],
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] > div,
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] > div > div,
+    section[data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] * {
+        background: #27ae60 !important;
+        background-color: #27ae60 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    section[data-testid="stSidebar"] [role="combobox"],
+    section[data-testid="stSidebar"] [role="combobox"] *,
+    section[data-testid="stSidebar"] [aria-haspopup="listbox"],
+    section[data-testid="stSidebar"] [aria-haspopup="listbox"] * {
+        background: #27ae60 !important;
+        background-color: #27ae60 !important;
+        border-color: #27ae60 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    /* Streamlit's visible select shell. Keep this last so it wins over BaseWeb styles. */
+    section[data-testid="stSidebar"] [data-baseweb="select"] > div,
+    section[data-testid="stSidebar"] [data-baseweb="select"] > div > div,
+    section[data-testid="stSidebar"] [data-baseweb="select"] [role="combobox"] {
+        background: #27ae60 !important;
+        background-color: #27ae60 !important;
+        background-image: none !important;
+        border: 1px solid #27ae60 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
     button[kind="secondary"], button[kind="primary"] {
         font-weight: 600 !important;
