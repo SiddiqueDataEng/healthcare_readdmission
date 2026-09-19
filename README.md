@@ -86,15 +86,27 @@ The final deliverable is an end-to-end Streamlit application in `app.py` with a 
 4. Explore outcome patterns and data quality in the dashboard.
 5. Train and compare five models, optionally balancing the training class with SMOTE.
 6. Select or load a compatible model for real-time scoring.
-7. Enter one patient or upload a batch to receive a probability, risk tier, and clinical follow-up guidance.
+7. Enter one patient or upload a batch to receive a demonstration risk estimate and exploratory context.
 8. Open SHAP explanations to see why the model assigned that risk.
 9. Export scored results for downstream review.
 
-This turns disconnected EHR-style tables into a repeatable clinical analytics workflow: cohort definition, feature engineering, predictive modeling, evaluation, explanation, and operational review in one place.
+This turns disconnected EHR-style tables into a repeatable analytics demonstration: cohort definition, feature engineering, predictive modeling, evaluation, explanation, and exploratory review in one place. It is not a validated clinical deployment.
 
 ### 7. Scope and responsible use
 
-The data are synthetic, so this project demonstrates engineering and analytical methods rather than validated clinical performance. It must not be used to make real patient-care decisions without external validation, prospective testing, calibration review, bias and subgroup analysis, privacy controls, clinical governance, and approval for the intended deployment environment. Model output is decision support, not a diagnosis or a replacement for clinician judgment.
+The data are synthetic, and the current processed cohort contains only 248 index-admission records with 2 observed 30-day readmissions. The test split contains no positive readmission outcomes, so test-set discrimination, recall, calibration, fairness, and subgroup conclusions are not reliable. The dashboard's external 22% heart-failure reference is contextual only; it is not a risk-adjusted CMS result for this cohort. Differences from that reference are not prevented readmissions, improvement, hospital performance, HRRP eligibility, or financial savings.
+
+This project demonstrates engineering and analytical methods rather than validated clinical performance. It must not be used to make real patient-care decisions without a sufficiently representative cohort, outcome verification, external validation, prospective testing, calibration review, bias and subgroup analysis, privacy controls, clinical governance, and approval for the intended deployment environment. Model output is a research demonstration, not a diagnosis or a replacement for clinician judgment.
+
+### Interpreting the Dashboard
+
+The Executive Summary separates three types of values:
+
+- **Observed metrics:** counts, rates, averages, and distributions calculated directly from the synthetic cohort.
+- **External reference:** the 22% heart-failure rate shown for context; it is not a directly comparable hospital benchmark without population and risk-adjustment alignment.
+- **Hypothetical scenarios:** arithmetic examples for cost or reduction assumptions; they are not estimates of prevented readmissions, annual penalties, or validated savings.
+
+An improvement claim requires comparable baseline and follow-up cohorts, a stable denominator, verified outcomes, enough readmission events, and appropriate risk adjustment. For example, moving from 22% to 18% is a 4 percentage-point absolute improvement and an 18.2% relative improvement only when those two rates come from comparable populations.
 
 ---
 
@@ -125,8 +137,8 @@ run_dashboard.bat
 ## 📊 What You Get
 
 ### 🎨 Interactive Dashboard
-- **6 Complete Modules** for comprehensive analysis
-- **Real-time predictions** with clinical recommendations
+- **Interactive modules** for exploratory analysis
+- **Demonstration risk estimates** with clearly labeled exploratory context
 - **Advanced ML models** (XGBoost, LightGBM, Random Forest, etc.)
 - **SHAP explainability** for model interpretability
 - **Custom analytics** and data exploration
@@ -142,8 +154,8 @@ run_dashboard.bat
 - **5 trained models** with full evaluation
 - **Automated feature engineering**
 - **Class imbalance handling** (SMOTE)
-- **Model persistence** for deployment
-- **Comprehensive metrics** (ROC-AUC, Precision, Recall, F1)
+- **Model persistence** for repeatable demonstrations
+- **Evaluation metrics** shown only when the evaluation data support them
 
 ---
 
@@ -152,10 +164,10 @@ run_dashboard.bat
 | Module | Description | Key Features |
 |--------|-------------|--------------|
 | 📊 **Overview & EDA** | Exploratory data analysis | Distributions, correlations, demographics |
-| 📈 **Advanced Analytics** | Statistical analysis | T-tests, risk stratification, cohort analysis |
+| 📈 **Advanced Analytics** | Exploratory statistical analysis | Descriptive tests, cohort analysis, and risk patterns |
 | 🤖 **Machine Learning** | Model training & evaluation | 5 models, ROC curves, feature importance |
 | 🔍 **Explainability** | SHAP interpretability | Global/local explanations, interactions |
-| 🎯 **Predictions** | Real-time risk assessment | Single patient & batch predictions |
+| 🎯 **Predictions** | Demonstration risk scoring | Single patient & batch estimates |
 | 📋 **Data Explorer** | Interactive data browser | Filtering, custom charts, quality checks |
 
 ---
