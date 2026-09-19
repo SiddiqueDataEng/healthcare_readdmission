@@ -348,6 +348,147 @@ except FileNotFoundError:
     st.error("⚠️ Data files not found. Please run `START_HERE.bat` to generate data.")
     st.stop()
 
+
+# ─── Plain-language chart guidance ───────────────────────────────────────────
+_original_plotly_chart = st.plotly_chart
+
+
+def _chart_guidance(title):
+    """Return plain-language interpretation text for a chart title."""
+    title_lower = title.lower()
+    if any(word in title_lower for word in ["correlation", "relationship"]):
+        return (
+            "Issue: variables may move together. Reason: shared clinical or utilization patterns can affect both. "
+            "Use: treat this as an association, not proof that one variable causes another. "
+            "Impact: it helps prioritize questions for deeper clinical review."
+        )
+    if any(word in title_lower for word in ["model", "roc", "precision", "recall", "calibration", "shap", "feature importance"]):
+        return (
+            "Issue: a prediction may miss some patients or flag patients unnecessarily. Reason: models learn patterns from historical data. "
+            "Use: check recall, precision, calibration, and the number of positive cases before trusting it. "
+            "Impact: the result can support research review, not replace clinical judgment."
+        )
+    if any(word in title_lower for word in ["cost", "saving", "penalty", "financial"]):
+        return (
+            "Issue: financial results depend on assumptions. Reason: cost, payer, and volume inputs may not represent a real hospital. "
+            "Use: change the inputs to test a hypothetical scenario. "
+            "Impact: this shows possible scale, not validated savings or an actual penalty."
+        )
+    if any(word in title_lower for word in ["trend", "time", "monthly", "year"]):
+        return (
+            "Issue: rates can change over time. Reason: patient mix and the number of records may differ between periods. "
+            "Use: read the rate together with its record count. "
+            "Impact: it can identify patterns worth investigating, not prove improvement by itself."
+        )
+    if any(word in title_lower for word in ["risk", "tier", "readmission"]):
+        return (
+            "Issue: some records may have a higher observed or predicted outcome rate. Reason: clinical severity and prior utilization differ between groups. "
+            "Use: compare both the rate and the group size. "
+            "Impact: it can help prioritize analysis, but it is not a diagnosis or automatic care instruction."
+        )
+    if any(word in title_lower for word in ["distribution", "histogram", "box", "violin", "population"]):
+        return (
+            "Issue: patient values may be concentrated, spread out, or skewed. Reason: patients have different clinical profiles. "
+            "Use: look for the typical range and unusual values before comparing groups. "
+            "Impact: it explains who is represented in the cohort and where data quality needs attention."
+        )
+    return (
+        "Issue: the visual summarizes a pattern in this dataset. Reason: records differ in outcomes, characteristics, or data quality. "
+        "Use: hover over points or bars and check the sample size. "
+        "Impact: it supports understanding and investigation, not a causal or clinical conclusion."
+    )
+
+
+def _add_chart_guidance(figure, **kwargs):
+    """Add accessible hover text and a visible interpretation to every Plotly chart."""
+    title = ""
+    if getattr(figure.layout, "title", None):
+        title = figure.layout.title.text or ""
+    guidance = _chart_guidance(title)
+    for trace in figure.data:
+        trace_type = getattr(trace, "type", "")
+        if trace_type == "pie":
+            trace.hovertemplate = (
+                "<b>%{label}</b><br>Value: %{value}<br>Share: %{percent}<br><br>"
+                + guidance.replace("\n", "<br>")
+                + "<extra></extra>"
+            )
+        elif trace_type == "heatmap":
+            trace.hovertemplate = (
+                "X: %{x}<br>Y: %{y}<br>Value: %{z:.3f}<br><br>"
+                + guidance.replace("\n", "<br>")
+                + "<extra></extra>"
+            )
+        elif trace_type not in ["indicator", "table"]:
+            trace.hovertemplate = (
+                "<b>%{fullData.name}</b><br>X: %{x}<br>Y: %{y}<br><br>"
+                + guidance.replace("\n", "<br>")
+                + "<extra></extra>"
+            )
+    result = _original_plotly_chart(figure, **kwargs)
+    st.caption(f"How to read this visual: {guidance}")
+    return result
+
+
+st.plotly_chart = _add_chart_guidance
+
+_original_pyplot = st.pyplot
+
+
+def _explained_pyplot(*args, **kwargs):
+    """Add plain-language guidance to Matplotlib visuals such as SHAP plots."""
+    result = _original_pyplot(*args, **kwargs)
+    st.caption(
+        "How to read this visual: Issue: a feature may appear influential in the model. "
+        "Reason: the model used it to change its estimate for the selected records. "
+        "Use: compare direction and size with clinical context. "
+        "Impact: this explains model behavior, but does not prove that the feature caused readmission."
+    )
+    return result
+
+
+st.pyplot = _explained_pyplot
+
+
+from streamlit.delta_generator import DeltaGenerator
+
+_original_metric = DeltaGenerator.metric
+_original_root_metric = st.metric
+
+
+def _metric_guidance(label):
+    """Return a short non-technical explanation for a KPI label."""
+    label_lower = str(label).lower()
+    if "rate" in label_lower or "readmit" in label_lower:
+        return "What it means: a count or percentage of readmission outcomes. Check the number of records behind it before interpreting the result."
+    if "cost" in label_lower or "saving" in label_lower or "penalty" in label_lower:
+        return "What it means: a cost or scenario amount based on entered assumptions, not a verified financial result."
+    if "risk" in label_lower or "score" in label_lower:
+        return "What it means: a summary score or estimate. It supports review and does not diagnose a patient or prescribe care."
+    if "sample" in label_lower or "patient" in label_lower or "cohort" in label_lower or "record" in label_lower:
+        return "What it means: the number of records included in this calculation. Small groups can make rates unstable."
+    return "What it means: an average or count calculated from the selected records. Use it to understand the cohort, not as proof of cause or improvement."
+
+
+def _explained_metric(self, label, value, delta=None, delta_color="normal", *, help=None, **kwargs):
+    if help is None:
+        help = _metric_guidance(label)
+    return _original_metric(
+        self, label, value, delta, delta_color=delta_color, help=help, **kwargs
+    )
+
+
+def _explained_root_metric(label, value, delta=None, delta_color="normal", *, help=None, **kwargs):
+    if help is None:
+        help = _metric_guidance(label)
+    return _original_root_metric(
+        label, value, delta, delta_color=delta_color, help=help, **kwargs
+    )
+
+
+DeltaGenerator.metric = _explained_metric
+st.metric = _explained_root_metric
+
 # ─── Page routing ─────────────────────────────────────────────────────────────
 if page == "🏠 Executive Summary":
     from page_modules import executive_summary

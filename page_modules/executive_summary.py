@@ -57,11 +57,11 @@ def show(full_data, train_data, test_data):
     )
 
     c1, c2, c3, c4, c5, c6 = st.columns(6)
-    c1.metric("Index Admissions", f"{total_patients:,}")
-    c2.metric("Observed 30-Day Rate", f"{readmit_rate:.1f}%")
-    c3.metric("Observed Readmissions", f"{total_readmits:,}")
-    c4.metric("Average LOS", f"{avg_los:.1f} days")
-    c5.metric("Average Age", f"{avg_age:.0f} yrs")
+    c1.metric("Index Admissions", f"{total_patients:,}", help="Number of index heart-failure admissions included in this synthetic cohort.")
+    c2.metric("Observed 30-Day Rate", f"{readmit_rate:.1f}%", help="Observed readmissions divided by index admissions. This is descriptive, not a validated hospital rate.")
+    c3.metric("Observed Readmissions", f"{total_readmits:,}", help="Number of records labeled as readmitted within 30 days after the index discharge.")
+    c4.metric("Average LOS", f"{avg_los:.1f} days", help="Average number of days between index admission and discharge in this cohort.")
+    c5.metric("Average Age", f"{avg_age:.0f} yrs", help="Average patient age in the records included in this cohort.")
     c6.metric(
         "Difference vs Reference",
         f"{reference_gap:+.1f} pp",
